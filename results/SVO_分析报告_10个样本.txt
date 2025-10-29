@@ -1,0 +1,280 @@
+====================================================================================================
+SVO 无依据检测演示报告 - 为什么准确率提升了
+====================================================================================================
+
+
+====================================================================================================
+样本 1 - ID: 2 | 任务: Summary | 标签: Evident Conflict, Evident Baseless Info, Evident Conflict
+====================================================================================================
+
+【原文】 (长度: 2848字符)
+Seventy years ago, Anne Frank died of typhus in a Nazi concentration camp at the age of 15. Just two weeks after her supposed death on March 31, 1945, the Bergen-Belsen concentration camp where she ha...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 970字符)
+New research conducted by the Anne Frank House has revealed that Anne Frank and her sister Margot likely died in the Bergen-Belsen concentration camp at least a month earlier than previously believed....
+
+【生成SVO】 共1个:
+  1. 主语:'The researchers' --谓语:[examine]--> 宾语:'archives' 
+
+【检测结果】
+  ⚠ 无依据 (1个):
+    - 'The researchers examine archives'
+
+  实际标签: Evident Conflict, Evident Baseless Info, Evident Conflict
+  检测命中: ✓ 是
+
+
+====================================================================================================
+样本 2 - ID: 3 | 任务: Summary | 标签: Subtle Baseless Info
+====================================================================================================
+
+【原文】 (长度: 2848字符)
+Seventy years ago, Anne Frank died of typhus in a Nazi concentration camp at the age of 15. Just two weeks after her supposed death on March 31, 1945, the Bergen-Belsen concentration camp where she ha...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 755字符)
+Here is a summary of the article in 115 words or less:
+
+Anne Frank died of typhus in a Nazi concentration camp at age 15, two weeks after her supposed death on March 31, 1945. New research suggests th...
+
+【生成SVO】 共0个:
+  (未提取到SVO)
+
+【检测结果】
+  ✓ 未检测到问题
+
+  实际标签: Subtle Baseless Info
+  检测命中: ✗ 否
+
+
+====================================================================================================
+样本 3 - ID: 5 | 任务: Summary | 标签: Evident Conflict, Subtle Baseless Info
+====================================================================================================
+
+【原文】 (长度: 2848字符)
+Seventy years ago, Anne Frank died of typhus in a Nazi concentration camp at the age of 15. Just two weeks after her supposed death on March 31, 1945, the Bergen-Belsen concentration camp where she ha...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 778字符)
+New research suggests that Anne Frank and her sister Margot died at least a month earlier than previously thought. According to the Anne Frank House, the sisters likely died in February or early March...
+
+【生成SVO】 共1个:
+  1. 主语:'The researchers' --谓语:[re]--> 宾语:'- examined archives' 
+
+【检测结果】
+  ⚠ 无依据 (1个):
+    - 'The researchers re - examined archives'
+
+  实际标签: Evident Conflict, Subtle Baseless Info
+  检测命中: ✓ 是
+
+
+====================================================================================================
+样本 4 - ID: 10 | 任务: Summary | 标签: Evident Conflict
+====================================================================================================
+
+【原文】 (长度: 2113字符)
+Andrew Getty, one of the heirs to billions of oil money, appears to have died of natural causes, a Los Angeles Police Department spokesman said. The coroner's preliminary assessment is there was no fo...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 327字符)
+Andrew Getty, an heir to the Getty oil fortune, died of natural causes, the LA Police Department says. He was found dead at home with some medication present, but no foul play is suspected. Getty had ...
+
+【生成SVO】 共0个:
+  (未提取到SVO)
+
+【检测结果】
+  ✓ 未检测到问题
+
+  实际标签: Evident Conflict
+  检测命中: ✗ 否
+
+
+====================================================================================================
+样本 5 - ID: 21 | 任务: Summary | 标签: Evident Baseless Info
+====================================================================================================
+
+【原文】 (长度: 8248字符)
+It's the kind of thing you see in movies, like Robert Redford's role in "All Is Lost" or Ang Lee's "Life of Pi." But, in real life, it's hard to swallow the idea of a single person being stranded at s...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 1965字符)
+There have been several instances of individuals surviving at sea for extended periods of time, often with limited resources and without the aid of technology. These stories are often referred to as "...
+
+【生成SVO】 共0个:
+  (未提取到SVO)
+
+【检测结果】
+  ✓ 未检测到问题
+
+  实际标签: Evident Baseless Info
+  检测命中: ✗ 否
+
+
+====================================================================================================
+样本 6 - ID: 22 | 任务: Summary | 标签: Evident Baseless Info
+====================================================================================================
+
+【原文】 (长度: 8248字符)
+It's the kind of thing you see in movies, like Robert Redford's role in "All Is Lost" or Ang Lee's "Life of Pi." But, in real life, it's hard to swallow the idea of a single person being stranded at s...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 871字符)
+There have been several instances of individuals surviving being stranded at sea for extended periods of time, some for weeks or even months. These survivors have relied on ingenuity, resourcefulness,...
+
+【生成SVO】 共1个:
+  1. 主语:'Examples' --谓语:[include]--> 宾语:'Louis Jordan' 
+
+【检测结果】
+  ⚠ 无依据 (1个):
+    - 'Examples include Louis Jordan'
+
+  实际标签: Evident Baseless Info
+  检测命中: ✓ 是
+
+
+====================================================================================================
+样本 7 - ID: 23 | 任务: Summary | 标签: Evident Baseless Info, Evident Baseless Info
+====================================================================================================
+
+【原文】 (长度: 8248字符)
+It's the kind of thing you see in movies, like Robert Redford's role in "All Is Lost" or Ang Lee's "Life of Pi." But, in real life, it's hard to swallow the idea of a single person being stranded at s...
+
+【原文SVO】 共0个:
+  (未提取到SVO)
+
+【生成文本】 (长度: 1180字符)
+There have been several instances of people surviving for extended periods of time at sea, often against incredible odds. In one case, a man named Louis Jordan was sailing alone when his boat capsized...
+
+【生成SVO】 共0个:
+  (未提取到SVO)
+
+【检测结果】
+  ✓ 未检测到问题
+
+  实际标签: Evident Baseless Info, Evident Baseless Info
+  检测命中: ✗ 否
+
+
+====================================================================================================
+样本 8 - ID: 28 | 任务: Summary | 标签: Evident Conflict, Evident Conflict
+====================================================================================================
+
+【原文】 (长度: 2086字符)
+The FBI charged a Philadelphia woman on Thursday with trying to travel overseas to fight for ISIS. She's one of three women arrested this week on terror charges. Two New York women were also taken int...
+
+【原文SVO】 共2个:
+  1. 主语:'The FBI' --谓语:[charge]--> 宾语:'a Philadelphia woman' 
+  2. 主语:'An FBI complaint' --谓语:[cite]--> 宾语:'numerous media messages' 
+
+【生成文本】 (长度: 521字符)
+Three women, including Keonna Thomas of Philadelphia, were charged with attempting to join ISIS this week. Thomas purchased a ticket to Barcelona but was arrested before her trip. Two other women, Noe...
+
+【生成SVO】 共3个:
+  1. 主语:'Thomas' --谓语:[purchase]--> 宾语:'a ticket' 
+  2. 主语:'The FBI' --谓语:[cite]--> 宾语:'media messages' 
+  3. 主语:'This' --谓语:[bring]--> 宾语:'the total number' 
+
+【检测结果】
+  ⚠ 无依据 (3个):
+    - 'Thomas purchase a ticket'
+    - 'The FBI cite media messages'
+    - 'This bring the total number'
+
+  实际标签: Evident Conflict, Evident Conflict
+  检测命中: ✓ 是
+
+
+====================================================================================================
+样本 9 - ID: 29 | 任务: Summary | 标签: Evident Conflict
+====================================================================================================
+
+【原文】 (长度: 2086字符)
+The FBI charged a Philadelphia woman on Thursday with trying to travel overseas to fight for ISIS. She's one of three women arrested this week on terror charges. Two New York women were also taken int...
+
+【原文SVO】 共2个:
+  1. 主语:'The FBI' --谓语:[charge]--> 宾语:'a Philadelphia woman' 
+  2. 主语:'An FBI complaint' --谓语:[cite]--> 宾语:'numerous media messages' 
+
+【生成文本】 (长度: 667字符)
+A 30-year-old Philadelphia woman, Keonna Thomas, was charged with attempting to travel to Syria to join ISIS. She was arrested on March 26 and could face 15 years in prison. Two other women, Noelle Ve...
+
+【生成SVO】 共1个:
+  1. 主语:'the Justice Department' --谓语:[prosecute]--> 宾语:'30 cases' 
+
+【检测结果】
+  ⚠ 无依据 (1个):
+    - 'the Justice Department prosecute 30 cases'
+
+  实际标签: Evident Conflict
+  检测命中: ✓ 是
+
+
+====================================================================================================
+样本 10 - ID: 33 | 任务: Summary | 标签: Evident Baseless Info
+====================================================================================================
+
+【原文】 (长度: 2308字符)
+Police in the Indian city of Malegaon, in the western state of Maharashtra, are requiring identity cards for an unusual group of residents: Cattle. Following a recent state-wide ban on the sale and co...
+
+【原文SVO】 共2个:
+  1. 主语:'Police' --谓语:[require]--> 宾语:'identity cards' 
+  2. 主语:'authorities' --谓语:[ask]--> 宾语:'residents' 
+
+【生成文本】 (长度: 665字符)
+In the Indian city of Malegaon, police are requiring residents to provide identification cards for their cattle in response to a state-wide ban on beef consumption. Residents must provide photographs ...
+
+【生成SVO】 共2个:
+  1. 主语:'police' --谓语:[require]--> 宾语:'residents' 
+  2. 主语:'Residents' --谓语:[provide]--> 宾语:'photographs' 
+
+【检测结果】
+  ⚠ 无依据 (2个):
+    - 'police require residents'
+    - 'Residents provide photographs'
+
+  实际标签: Evident Baseless Info
+  检测命中: ✓ 是
+
+
+====================================================================================================
+【总结分析】为什么添加无依据检测后准确率会提升
+====================================================================================================
+
+核心原因：
+
+1. 【SVO提取不完整】
+   - 原文和生成文本都可能提取不到SVO（复杂句式、被动语态等）
+   - 导致很多幻觉无法被检测到
+
+2. 【无依据检测捕获了什么】
+   - 生成文本新增的陈述（原文中完全没有）
+   - 改写导致的主谓不匹配（同义词、指代）
+   - 扩充信息（模型自己编造的内容）
+
+3. 【为什么召回率提升显著】
+   原来：只检测矛盾类（需要主谓匹配） → 召回率3%
+   现在：检测矛盾类 + 无依据类 → 召回率预计20-40%
+
+4. 【典型场景】
+   场景A: 原文SVO=0, 生成SVO=2 → 旧方法检测不到，新方法标记2个无依据
+   场景B: 原文SVO=['A acquire B'], 生成SVO=['A buy C'] → 宾语矛盾
+   场景C: 改写 'Apple'→'tech giant' → 主语不匹配，标记为无依据
+
+5. 【代价】
+   - 摘要任务的合理改写会被误报
+   - 准确率可能从33%降到15-25%
+   - 但召回率从3%提升到20-40%，整体F1分数提升

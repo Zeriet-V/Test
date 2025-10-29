@@ -1,0 +1,23 @@
+# 通用数据集框架依赖包
+
+# 核心依赖
+numpy>=1.19.0
+scikit-learn>=0.24.0
+
+# 可选依赖（用于实际数据集处理）
+# pandas>=1.2.0
+# tqdm>=4.60.0
+# prettytable>=2.0.0
+
+# 用于与OpenAI API交互（如果需要GPT评估）
+# openai>=0.27.0
+
+# 用于异步处理（如果需要）
+# asyncio
+# aiohttp>=3.8.0
+
+# 用于深度学习模型（如果需要）
+# torch>=1.9.0
+# transformers>=4.10.0
+# huggingface-hub>=0.10.0
+
