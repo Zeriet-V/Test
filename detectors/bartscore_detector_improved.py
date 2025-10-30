@@ -17,6 +17,14 @@ from tqdm import tqdm
 from transformers import BartTokenizer, BartForConditionalGeneration
 import numpy as np
 
+# 设置 Hugging Face 镜像（解决国内网络连接问题）
+# 如果需要使用官方源，可以注释掉下面这行
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+# 增加超时时间，避免连接超时
+os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '300'  # 5分钟超时
+# 禁用符号链接（某些文件系统可能有问题）
+os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
+
 
 class ImprovedBARTScorer:
     """
@@ -41,8 +49,27 @@ class ImprovedBARTScorer:
         print(f"使用设备: {device}")
         
         self.device = device
-        self.tokenizer = BartTokenizer.from_pretrained(model_name)
-        self.model = BartForConditionalGeneration.from_pretrained(model_name)
+        
+        # 智能加载：优先离线，失败则在线下载
+        try:
+            print("尝试离线加载（使用本地缓存）...")
+            self.tokenizer = BartTokenizer.from_pretrained(
+                model_name,
+                local_files_only=True  # 优先使用本地文件
+            )
+            self.model = BartForConditionalGeneration.from_pretrained(
+                model_name,
+                local_files_only=True
+            )
+            print("✓ 离线加载成功！")
+        except (OSError, ValueError) as e:
+            print("⚠ 本地文件不存在或不完整，开始在线下载...")
+            print("（首次下载约1.6GB，需要几分钟，请耐心等待）")
+            self.tokenizer = BartTokenizer.from_pretrained(model_name)
+            self.model = BartForConditionalGeneration.from_pretrained(model_name)
+            print("✓ 在线下载并加载成功！")
+            print("（下次运行将直接使用本地缓存）")
+        
         self.model.eval()
         self.model.to(self.device)
         
