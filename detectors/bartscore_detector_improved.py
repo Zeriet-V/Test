@@ -11,6 +11,8 @@ BARTScore 幻觉检测器 - 改进版
 
 import torch
 import json
+import os
+import argparse
 from tqdm import tqdm
 from transformers import BartTokenizer, BartForConditionalGeneration
 import numpy as np
@@ -21,13 +23,20 @@ class ImprovedBARTScorer:
     改进的BARTScore评分器
     支持双向评分和更精细的评估
     """
-    def __init__(self, model_name='facebook/bart-large-cnn', device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model_name='facebook/bart-large-cnn', device='cuda' if torch.cuda.is_available() else 'cpu', gpu_id=None):
         """
         初始化BARTScore模型
         
         :param model_name: BART模型名称
         :param device: 运行设备
+        :param gpu_id: GPU ID (0, 1, 2, ...)，如果为None则自动选择
         """
+        # 如果指定了GPU ID，设置device
+        if gpu_id is not None and torch.cuda.is_available():
+            device = f'cuda:{gpu_id}'
+            torch.cuda.set_device(gpu_id)
+            print(f"指定使用GPU: {gpu_id}")
+        
         print(f"加载改进版BARTScore模型: {model_name}")
         print(f"使用设备: {device}")
         
@@ -109,7 +118,8 @@ def process_dataset_improved(input_file='test_response_label.jsonl',
                              output_file='bartscore_improved_results.jsonl',
                              task_thresholds=None,
                              model_name='facebook/bart-large-cnn',
-                             use_bidirectional=True):
+                             use_bidirectional=True,
+                             gpu_id=None):
     """
     使用改进的BARTScore检测幻觉
     
@@ -118,11 +128,14 @@ def process_dataset_improved(input_file='test_response_label.jsonl',
     :param task_thresholds: 任务特定阈值字典 {'Summary': -1.5, 'QA': -2.0, 'Data2txt': -2.3}
     :param model_name: BART模型名称
     :param use_bidirectional: 是否使用双向评分
+    :param gpu_id: GPU ID (0, 1, 2, ...)，如果为None则自动选择
     """
     print(f"\n【改进版BARTScore幻觉检测器】开始处理数据集: {input_file}")
     print("=" * 80)
     print(f"模型: {model_name}")
     print(f"使用双向评分: {use_bidirectional}")
+    if gpu_id is not None:
+        print(f"指定GPU: {gpu_id}")
     
     # 默认任务特定阈值（基于数据分析）
     if task_thresholds is None:
@@ -138,7 +151,7 @@ def process_dataset_improved(input_file='test_response_label.jsonl',
     print("=" * 80)
     
     # 初始化BARTScore
-    scorer = ImprovedBARTScorer(model_name=model_name)
+    scorer = ImprovedBARTScorer(model_name=model_name, gpu_id=gpu_id)
     
     # 统计数据
     total_count = 0
@@ -534,24 +547,43 @@ def process_dataset_improved(input_file='test_response_label.jsonl',
 
 
 if __name__ == "__main__":
-    # 检查是否有GPU
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print(f"\n使用设备: {device}")
+    # 命令行参数解析
+    parser = argparse.ArgumentParser(description='改进版BARTScore幻觉检测器')
+    parser.add_argument('--gpu', type=int, default=None, help='指定GPU ID (0, 1, 2, ...)，不指定则自动选择')
+    parser.add_argument('--input', type=str, default='../data/test_response_label.jsonl', help='输入文件路径')
+    parser.add_argument('--output', type=str, default='bartscore_improved_results.jsonl', help='输出文件路径')
+    parser.add_argument('--no-bidirectional', action='store_true', help='禁用双向评分')
+    parser.add_argument('--model', type=str, default='facebook/bart-large-cnn', help='BART模型名称')
     
-    if device == 'cpu':
+    args = parser.parse_args()
+    
+    # 检查GPU可用性
+    if torch.cuda.is_available():
+        gpu_count = torch.cuda.device_count()
+        print(f"\n检测到 {gpu_count} 张GPU卡:")
+        for i in range(gpu_count):
+            print(f"  GPU {i}: {torch.cuda.get_device_name(i)}")
+        
+        if args.gpu is not None:
+            if args.gpu >= gpu_count:
+                print(f"⚠ 警告: 指定的GPU {args.gpu} 不存在，将使用GPU 0")
+                args.gpu = 0
+    else:
         print("⚠ 警告: 未检测到GPU，使用CPU运行会很慢")
+        args.gpu = None
     
     # 运行改进版BARTScore检测
     # 使用任务特定阈值和双向评分
     process_dataset_improved(
-        input_file='../data/test_response_label.jsonl',
-        output_file='bartscore_improved_results.jsonl',
+        input_file=args.input,
+        output_file=args.output,
         task_thresholds={
             'Summary': -1.65,      # 原平均-1.82，略微放宽以减少假阳性
             'QA': -2.05,           # 原平均-2.12
             'Data2txt': -2.45      # 原平均-2.50
         },
-        model_name='facebook/bart-large-cnn',
-        use_bidirectional=True  # 启用双向评分
+        model_name=args.model,
+        use_bidirectional=not args.no_bidirectional,  # 启用双向评分
+        gpu_id=args.gpu
     )
 

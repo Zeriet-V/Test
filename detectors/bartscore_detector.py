@@ -11,6 +11,8 @@ BARTScore: 基于BART的文本生成评估指标，可用于检测幻觉
 
 import torch
 import json
+import os
+import argparse
 from tqdm import tqdm
 from transformers import BartTokenizer, BartForConditionalGeneration
 import numpy as np
@@ -20,13 +22,20 @@ class BARTScorer:
     """
     BARTScore评分器
     """
-    def __init__(self, model_name='facebook/bart-large-cnn', device='cuda' if torch.cuda.is_available() else 'cpu'):
+    def __init__(self, model_name='facebook/bart-large-cnn', device='cuda' if torch.cuda.is_available() else 'cpu', gpu_id=None):
         """
         初始化BARTScore模型
         
         :param model_name: BART模型名称
         :param device: 运行设备
+        :param gpu_id: GPU ID (0, 1, 2, ...)，如果为None则自动选择
         """
+        # 如果指定了GPU ID，设置device
+        if gpu_id is not None and torch.cuda.is_available():
+            device = f'cuda:{gpu_id}'
+            torch.cuda.set_device(gpu_id)
+            print(f"指定使用GPU: {gpu_id}")
+        
         print(f"加载BARTScore模型: {model_name}")
         print(f"使用设备: {device}")
         
@@ -138,7 +147,8 @@ def process_dataset_bartscore(input_file='test_response_label.jsonl',
                                output_file='bartscore_results.jsonl',
                                threshold=-1.8649,
                                model_name='facebook/bart-large-cnn',
-                               batch_size=4):
+                               batch_size=4,
+                               gpu_id=None):
     """
     使用BARTScore检测幻觉
     
@@ -147,16 +157,19 @@ def process_dataset_bartscore(input_file='test_response_label.jsonl',
     :param threshold: 检测阈值（分数低于此值标记为幻觉）
     :param model_name: BART模型名称
     :param batch_size: 批处理大小
+    :param gpu_id: GPU ID (0, 1, 2, ...)，如果为None则自动选择
     """
     print(f"\n【BARTScore幻觉检测器】开始处理数据集: {input_file}")
     print("=" * 80)
     print(f"模型: {model_name}")
     print(f"检测阈值: {threshold:.4f} (分数 < {threshold:.4f} 标记为幻觉)")
     print(f"批处理大小: {batch_size}")
+    if gpu_id is not None:
+        print(f"指定GPU: {gpu_id}")
     print("=" * 80)
     
     # 初始化BARTScore
-    scorer = BARTScorer(model_name=model_name)
+    scorer = BARTScorer(model_name=model_name, gpu_id=gpu_id)
     
     # 统计数据
     total_count = 0
@@ -539,20 +552,39 @@ def process_dataset_bartscore(input_file='test_response_label.jsonl',
 
 
 if __name__ == "__main__":
-    # 检查是否有GPU
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print(f"\n使用设备: {device}")
+    # 命令行参数解析
+    parser = argparse.ArgumentParser(description='BARTScore幻觉检测器')
+    parser.add_argument('--gpu', type=int, default=None, help='指定GPU ID (0, 1, 2, ...)，不指定则自动选择')
+    parser.add_argument('--input', type=str, default='../data/test_response_label.jsonl', help='输入文件路径')
+    parser.add_argument('--output', type=str, default='bartscore_results.jsonl', help='输出文件路径')
+    parser.add_argument('--threshold', type=float, default=-1.8649, help='检测阈值')
+    parser.add_argument('--batch-size', type=int, default=4, help='批处理大小')
+    parser.add_argument('--model', type=str, default='facebook/bart-large-cnn', help='BART模型名称')
     
-    if device == 'cpu':
+    args = parser.parse_args()
+    
+    # 检查GPU可用性
+    if torch.cuda.is_available():
+        gpu_count = torch.cuda.device_count()
+        print(f"\n检测到 {gpu_count} 张GPU卡:")
+        for i in range(gpu_count):
+            print(f"  GPU {i}: {torch.cuda.get_device_name(i)}")
+        
+        if args.gpu is not None:
+            if args.gpu >= gpu_count:
+                print(f"⚠ 警告: 指定的GPU {args.gpu} 不存在，将使用GPU 0")
+                args.gpu = 0
+    else:
         print("⚠ 警告: 未检测到GPU，使用CPU运行会很慢")
         print("建议: 如有GPU，请确保安装了正确的PyTorch版本")
+        args.gpu = None
     
     # 运行BARTScore检测
-    # 使用基于1000样本分析确定的最优阈值 -1.8649
     process_dataset_bartscore(
-        input_file='../data/test_response_label.jsonl',
-        output_file='bartscore_results.jsonl',
-        threshold=-1.8649,  # 最优阈值
-        model_name='facebook/bart-large-cnn',
-        batch_size=4
+        input_file=args.input,
+        output_file=args.output,
+        threshold=args.threshold,
+        model_name=args.model,
+        batch_size=args.batch_size,
+        gpu_id=args.gpu
     )
