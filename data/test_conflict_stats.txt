@@ -1,0 +1,30 @@
+================================================================================
+矛盾型幻觉数据统计
+================================================================================
+
+【总体统计】
+  总样本数: 14233
+  - 包含 Conflict: 3086 (21.68%)
+  - 只有 Baseless: 3046 (21.40%)
+  - 无标签: 8101 (56.92%)
+
+【幻觉类型分布】
+  Evident Baseless Info: 5019
+  Evident Conflict: 4272
+  Subtle Baseless Info: 1993
+  Subtle Conflict: 163
+
+【按任务类型统计】
+  Data2txt_baseless: 1235
+  Data2txt_conflict: 2204
+  Data2txt_no_label: 1545
+  QA_baseless: 1068
+  QA_conflict: 297
+  QA_no_label: 3362
+  Summary_baseless: 743
+  Summary_conflict: 585
+  Summary_no_label: 3194
+
+================================================================================
+✓ Conflict 数据已保存到: /home/xgq/Test/data/test_conflict_only.jsonl
+================================================================================
