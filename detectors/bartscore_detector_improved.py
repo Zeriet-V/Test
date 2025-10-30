@@ -12,18 +12,20 @@ BARTScore 幻觉检测器 - 改进版
 import torch
 import json
 import os
+import sys
 import argparse
 from tqdm import tqdm
-from transformers import BartTokenizer, BartForConditionalGeneration
 import numpy as np
 
-# 设置 Hugging Face 镜像（解决国内网络连接问题）
-# 如果需要使用官方源，可以注释掉下面这行
+# ===== 必须在 import transformers 之前设置环境变量 =====
 os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
-# 增加超时时间，避免连接超时
-os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '300'  # 5分钟超时
-# 禁用符号链接（某些文件系统可能有问题）
+os.environ['HF_HUB_DOWNLOAD_TIMEOUT'] = '300'
 os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
+
+# 打印确认
+print(f"🔧 镜像设置: {os.environ.get('HF_ENDPOINT')}")
+
+from transformers import BartTokenizer, BartForConditionalGeneration
 
 
 class ImprovedBARTScorer:
@@ -50,20 +52,33 @@ class ImprovedBARTScorer:
         
         self.device = device
         
-        # 智能加载：优先离线，失败则在线下载
-        try:
-            print("尝试离线加载（使用本地缓存）...")
-            self.tokenizer = BartTokenizer.from_pretrained(
-                model_name,
-                local_files_only=True  # 优先使用本地文件
-            )
-            self.model = BartForConditionalGeneration.from_pretrained(
-                model_name,
-                local_files_only=True
-            )
-            print("✓ 离线加载成功！")
-        except (OSError, ValueError) as e:
-            print("⚠ 本地文件不存在或不完整，开始在线下载...")
+        # 检查本地缓存是否存在
+        cache_dir = os.path.expanduser('~/.cache/huggingface/hub')
+        model_cache = os.path.join(cache_dir, f'models--{model_name.replace("/", "--")}')
+        
+        if os.path.exists(model_cache):
+            print("检测到本地缓存，尝试离线加载...")
+            try:
+                self.tokenizer = BartTokenizer.from_pretrained(
+                    model_name,
+                    local_files_only=True
+                )
+                self.model = BartForConditionalGeneration.from_pretrained(
+                    model_name,
+                    local_files_only=True
+                )
+                print("✓ 离线加载成功！")
+            except Exception as e:
+                print(f"⚠ 离线加载失败: {str(e)[:100]}")
+                print("删除损坏的缓存，开始在线下载...")
+                import shutil
+                shutil.rmtree(model_cache, ignore_errors=True)
+                print("（首次下载约1.6GB，需要几分钟，请耐心等待）")
+                self.tokenizer = BartTokenizer.from_pretrained(model_name)
+                self.model = BartForConditionalGeneration.from_pretrained(model_name)
+                print("✓ 在线下载并加载成功！")
+        else:
+            print("本地无缓存，开始在线下载...")
             print("（首次下载约1.6GB，需要几分钟，请耐心等待）")
             self.tokenizer = BartTokenizer.from_pretrained(model_name)
             self.model = BartForConditionalGeneration.from_pretrained(model_name)
