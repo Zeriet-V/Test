@@ -482,7 +482,7 @@ if __name__ == "__main__":
     parser.add_argument('--threshold-entail', type=float, default=0.45, help='entailment 阈值')
     parser.add_argument('--threshold-contra', type=float, default=0.2, help='contradiction 阈值')
     parser.add_argument('--use-entailment', action='store_true', default=True, help='使用 entailment 判定')
-    parser.add_argument('--no-sentence-level', dest='sentence_level', action='store_false', help='禁用句子级检测')
+    parser.add_argument('--sentence-level', action='store_true', default=True, help='启用句子级检测')
     parser.add_argument('--top-k', type=int, default=3, help='检索 top-k 个相关句子')
     parser.add_argument('--local-only', action='store_true', help='仅使用本地缓存')
     
