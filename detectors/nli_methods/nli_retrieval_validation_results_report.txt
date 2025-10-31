@@ -1,0 +1,46 @@
+================================================================================
+检索增强 NLI 幻觉检测报告
+================================================================================
+
+模型: MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli
+检索模型: sentence-transformers/all-MiniLM-L6-v2
+设备: cuda:1
+检索 Top-K: 3
+句子级检测: True
+判定阈值 (entailment < t): t_entail=0.45
+判定阈值 (contradiction > t): t_contra=0.2
+
+【总体统计】
+  总样本: 3557
+  有标签 (被标注为含幻觉): 1532
+  无标签: 2025
+  检测到幻觉: 3200
+
+【分数统计】
+  全部 contradiction 平均: 0.1220
+  有幻觉样本 contradiction 平均: 0.0995
+  无幻觉样本 contradiction 平均: 0.1390
+
+【性能指标】
+  TP: 1501
+  FP: 1699
+  FN: 31
+  TN: 326
+
+  Precision: 46.91%
+  Recall: 97.98%
+  F1: 63.44
+
+按任务类型统计:
+  - Data2txt: total=1214, has_label=815, detected=1214, mean_contra=0.0305
+  - Summary: total=1136, has_label=358, detected=953, mean_contra=0.0730
+  - QA: total=1207, has_label=359, detected=1033, mean_contra=0.2602
+
+按幻觉类型统计:
+  - Evident Baseless Info: total=1218, detected=1207, sample_ids=['9568', '13222', '16996', '16996', '16996']
+  - Evident Conflict: total=1052, detected=1042, sample_ids=['9568', '2264', '13222', '13222', '13222']
+  - Subtle Baseless Info: total=534, detected=526, sample_ids=['2264', '2781', '9737', '9737', '14051']
+  - Subtle Conflict: total=38, detected=33, sample_ids=['16620', '83', '15681', '15681', '15681']
+
+结果文件: nli_retrieval_validation_results.jsonl
+================================================================================
