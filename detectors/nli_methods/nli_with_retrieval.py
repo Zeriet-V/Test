@@ -98,11 +98,12 @@ class RetrievalAugmentedNLI:
         
         print("\n✓ 所有模型加载完成！")
         
-        # NLI 标签映射
+        # NLI 标签映射（官方正确映射 - 已修复）
+        # 0: entailment, 1: neutral, 2: contradiction
         self.label_mapping = {
-            0: 'contradiction',
-            1: 'neutral',
-            2: 'entailment'
+            0: 'entailment',     # 蕴含
+            1: 'neutral',        # 中立
+            2: 'contradiction'   # 矛盾
         }
     
     def split_into_sentences(self, text):
